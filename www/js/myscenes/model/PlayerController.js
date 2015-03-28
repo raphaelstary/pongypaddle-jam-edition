@@ -5,16 +5,18 @@ var PlayerController = (function (Math, Entity, Vectors) {
         this.worldBuilder = worldBuilder;
     }
 
-    var maxAcceleration = 5;
-
-    PlayerController.prototype.move = function (player, xDelta) {
-        if (Math.abs(player.forceX) < maxAcceleration) {
-            player.forceX += xDelta/2;
-        }
+    PlayerController.prototype.jumpLeft = function (player) {
+        player.forceX -= 5;
+        player.forceY -= 15;
     };
 
-    PlayerController.prototype.jump = function (player) {
+    PlayerController.prototype.jumpRight = function (player) {
+        player.forceX += 5;
         player.forceY -= 15;
+    };
+
+    PlayerController.prototype.createBall = function (point, direction) {
+        this.worldBuilder.createBall(point, direction);
     };
 
     return PlayerController;

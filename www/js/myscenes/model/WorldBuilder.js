@@ -13,14 +13,14 @@ var WorldBuilder = (function (Entity) {
     }
 
     WorldBuilder.prototype.createDefaultWalls = function () {
-        var wallLeft = this.stage.drawRectangle(this.tileHeight, this.screenHeight / 2, this.tileHeight * 2,
+        var wallLeft = this.stage.drawRectangle(this.tileHeight/2, this.screenHeight / 2, this.tileHeight*2,
             this.screenHeight, 'white', true);
-        var wallRight = this.stage.drawRectangle(this.screenWidth - this.tileHeight, this.screenHeight / 2,
-            this.tileHeight * 2, this.screenHeight, 'white', true);
-        var wallTop = this.stage.drawRectangle(this.screenWidth / 2, this.tileHeight, this.screenWidth,
-            this.tileHeight * 2, 'white', true);
-        var wallBottom = this.stage.drawRectangle(this.screenWidth / 2, this.screenHeight - this.tileHeight,
-            this.screenWidth, this.tileHeight * 2, 'white', true);
+        var wallRight = this.stage.drawRectangle(this.screenWidth - this.tileHeight/2, this.screenHeight / 2,
+            this.tileHeight*2, this.screenHeight, 'white', true);
+        var wallTop = this.stage.drawRectangle(this.screenWidth / 2, this.tileHeight/2, this.screenWidth,
+            this.tileHeight*2, 'white', true);
+        var wallBottom = this.stage.drawRectangle(this.screenWidth / 2, this.screenHeight - this.tileHeight/2,
+            this.screenWidth, this.tileHeight*2, 'white', true);
 
         this.scenery.push(createEntity(wallTop), createEntity(wallBottom), createEntity(wallLeft),
             createEntity(wallRight));
@@ -34,7 +34,7 @@ var WorldBuilder = (function (Entity) {
 
         [0].forEach(function (num) {
             this.players[num] = {
-                entity: this.createPlayerEntity({x:this.tileHeight*5,y:this.tileHeight*10}, num),
+                entity: this.createPlayerEntity({x:this.screenWidth/2,y:this.screenHeight/2}, num),
                 controls: [],
                 jumpPressed: false
             };
@@ -46,10 +46,10 @@ var WorldBuilder = (function (Entity) {
     WorldBuilder.prototype.createPlayerEntity = function (startPosition, id, color) {
         var sprite;
         if (color) {
-            sprite = this.stage.drawRectangle(startPosition.x, startPosition.y, this.tileHeight * 2, this.tileHeight,
+            sprite = this.stage.drawRectangle(startPosition.x, startPosition.y, this.tileHeight * 10, this.tileHeight * 2,
                 color, true);
         } else {
-            sprite = this.stage.drawRectangle(startPosition.x, startPosition.y, this.tileHeight * 2, this.tileHeight,
+            sprite = this.stage.drawRectangle(startPosition.x, startPosition.y, this.tileHeight * 10, this.tileHeight * 2,
                 'white');
         }
         var entity = new Entity(startPosition.x, startPosition.y, startRotation, sprite, sprite);
