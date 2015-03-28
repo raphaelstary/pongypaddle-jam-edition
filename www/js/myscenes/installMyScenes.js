@@ -5,6 +5,12 @@ var installMyScenes = (function (SceneManager) {
         // create your scenes and add them to the scene manager
 
         var sceneManager = new SceneManager();
+        var startScreen = new SplashScreen(sceneServices);
+        var gameScreen = new PlayGame(sceneServices);
+        var endScreen = new EndScreen(sceneServices);
+        sceneManager.add(startScreen.show.bind(startScreen));
+        sceneManager.add(gameScreen.show.bind(gameScreen));
+        //sceneManager.add(endScreen.show.bind(endScreen));
 
         return sceneManager;
     }
