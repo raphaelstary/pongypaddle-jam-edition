@@ -51,6 +51,7 @@ var PlayGame = (function (Event, createWorld, Object, Math) {
         }
 
         function nextScene() {
+            self.sceneStorage.points = score;
             world.nuke();
             self.stage.remove(scoreBoard);
             self.events.unsubscribe(keyBoardListener);

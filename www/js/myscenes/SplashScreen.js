@@ -20,21 +20,27 @@ var SplashScreen = (function (Event, Key) {
             }
         });
 
-        var myName = this.stage.drawText(screenWidth / 2, screenHeight / 6, 'Raphael Stary', tileWidth * 3, 'gamefont', 'white');
+        var myName = this.stage.drawText(screenWidth / 2, screenHeight / 6, 'Raphael Stary', tileWidth * 2, 'gamefont', 'white');
 
-        var presents = this.stage.drawText(screenWidth / 2, screenHeight / 6 * 1.5, 'presents', tileWidth * 2, 'gamefont', 'white');
-        var gameName = this.stage.drawText(screenWidth / 2, screenHeight / 5*2, 'PONGY PADDLE', tileWidth * 4,
+        var presents = this.stage.drawText(screenWidth / 2, screenHeight / 6 * 1.3, 'presents', tileWidth, 'gamefont', 'white');
+        var gameName = this.stage.drawText(screenWidth / 2, screenHeight / 5*2, 'PONGY PADDLE', tileWidth * 3.5,
             'gamefont', 'white');
 
         var gameJamEdition = this.stage.drawText(screenWidth / 2, screenHeight / 2, "game jam edition", tileWidth * 2,
             'gamefont', 'grey');
 
-        var gameControls = this.stage.drawText(screenWidth / 2, screenHeight / 4 * 3, "press 'ENTER' to continue", tileWidth * 2,
+        var left = this.stage.drawText(screenWidth / 2, screenHeight / 6 * 4, "'<-' (left arrow key) - jump left", tileWidth,
+            'gamefont', 'darkgrey');
+        var right = this.stage.drawText(screenWidth / 2, screenHeight / 6 * 4.3, "'->' (right arrow key) - jump right", tileWidth,
+            'gamefont', 'darkgrey');
+        var gameControls = this.stage.drawText(screenWidth / 2, screenHeight / 6 * 5, "press 'ENTER' to continue", tileWidth * 2,
             'gamefont', 'white');
 
         var self = this;
 
         function endScene() {
+            self.stage.remove(left);
+            self.stage.remove(right);
             self.stage.remove(myName);
             self.stage.remove(presents);
             self.stage.remove(gameName);
