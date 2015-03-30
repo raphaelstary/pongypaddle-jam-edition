@@ -6,17 +6,17 @@ var PlayerController = (function (Math, Entity, Vectors) {
     }
 
     PlayerController.prototype.jumpLeft = function (player) {
-        player.forceX -= 5;
-        player.forceY -= 15;
+        player.forceX -= 10;
+        player.forceY -= 20;
     };
 
     PlayerController.prototype.jumpRight = function (player) {
-        player.forceX += 5;
-        player.forceY -= 15;
+        player.forceX += 10;
+        player.forceY -= 20;
     };
 
-    PlayerController.prototype.createBall = function (point, direction) {
-        this.worldBuilder.createBall(point, direction);
+    PlayerController.prototype.createNewBall = function () {
+        this.worldBuilder.createRandomBall();
     };
 
     return PlayerController;

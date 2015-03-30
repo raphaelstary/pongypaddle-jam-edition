@@ -1,4 +1,4 @@
-var PlayGame = (function (Event, createWorld, Object) {
+var PlayGame = (function (Event, createWorld, Object, Math) {
     "use strict";
 
     function PlayGame(services) {
@@ -15,39 +15,49 @@ var PlayGame = (function (Event, createWorld, Object) {
         var screenHeight = 640;
         var tileWidth = 10;
 
-        var worldWrapper = createWorld(this.stage, screenWidth, screenHeight, tileWidth);
+        var worldWrapper = createWorld(this.stage, screenWidth, screenHeight, tileWidth, paddleHit, gameOver);
         var world = worldWrapper.world;
         var worldBuilder = worldWrapper.worldBuilder;
 
         worldBuilder.createDefaultWalls();
         worldBuilder.initDefaultPlayers();
+        var scoreBoard = worldBuilder.createScoreBoard();
         world.activePlayers = 1;
-        world.activeBalls = 1;
+        worldBuilder.createRandomBall();
+        world.activeBalls++;
 
         var keyBoardListener = this.events.subscribe(Event.KEY_BOARD, world.handleKeyBoard.bind(world));
         var movePlayerListener = this.events.subscribe(Event.TICK_MOVE, world.updatePlayerMovement.bind(world));
         var moveBallListener = this.events.subscribe(Event.TICK_MOVE, world.updateBallMovement.bind(world));
-        var ballCollisionListener = this.events.subscribe(Event.TICK_COLLISION,
-            world.checkBallCollision.bind(world));
+        var ballCollisionListener = this.events.subscribe(Event.TICK_COLLISION, world.checkBallCollision.bind(world));
         var wallsKill = false;
         var wallCollisionListener = wallsKill ?
             this.events.subscribe(Event.TICK_COLLISION, world.checkCollisionsWithWallsKillOn.bind(world)) :
             this.events.subscribe(Event.TICK_COLLISION, world.checkCollisions.bind(world));
         var cameraListener = this.events.subscribe(Event.TICK_CAMERA, world.updateCamera.bind(world));
 
-        var gameStateListener = this.events.subscribe(Event.TICK_CAMERA, function () {
-            if (world.activePlayers < 1 || world.activeBalls < 1) {
-                if (hasEnded)
-                    return;
-                hasEnded = true;
-                nextScene();
+        function gameOver() {
+            if (hasEnded)
+                return;
+            hasEnded = true;
+            nextScene();
+        }
+
+        var score = 9;
+        function paddleHit() {
+            score++;
+            scoreBoard.data.msg = score.toString();
+            if (score % 10 == 0) {
+                var howMany = Math.floor(score / 10);
+                for (var i = 0; i < howMany; i++) {
+                    worldBuilder.createRandomBall();
+                }
             }
-        });
+        }
 
         function nextScene() {
             world.nuke();
-
-            self.events.unsubscribe(gameStateListener);
+            self.stage.remove(scoreBoard);
             self.events.unsubscribe(keyBoardListener);
             self.events.unsubscribe(movePlayerListener);
             self.events.unsubscribe(moveBallListener);
@@ -60,4 +70,4 @@ var PlayGame = (function (Event, createWorld, Object) {
     };
 
     return PlayGame;
-})(Event, createWorld, Object);
+})(Event, createWorld, Object, Math);

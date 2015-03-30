@@ -1,7 +1,7 @@
-var WorldBuilder = (function (Entity) {
+var WorldBuilder = (function (Entity, Vectors, range) {
     "use strict";
 
-    function WorldBuilder(stage, screenWidth, screenHeight, tileHeight, players, scenery, balls) {
+    function WorldBuilder(stage, screenWidth, screenHeight, tileHeight, players, scenery, balls, obstacles) {
         this.stage = stage;
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
@@ -10,20 +10,27 @@ var WorldBuilder = (function (Entity) {
         this.players = players;
         this.scenery = scenery;
         this.balls = balls;
+        this.obstacles = obstacles;
     }
 
     WorldBuilder.prototype.createDefaultWalls = function () {
-        var wallLeft = this.stage.drawRectangle(this.tileHeight/2, this.screenHeight / 2, this.tileHeight*2,
+        var wallLeft = this.stage.drawRectangle(this.tileHeight / 2, this.screenHeight / 2, this.tileHeight,
             this.screenHeight, 'white', true);
-        var wallRight = this.stage.drawRectangle(this.screenWidth - this.tileHeight/2, this.screenHeight / 2,
-            this.tileHeight*2, this.screenHeight, 'white', true);
-        var wallTop = this.stage.drawRectangle(this.screenWidth / 2, this.tileHeight/2, this.screenWidth,
-            this.tileHeight*2, 'white', true);
-        var wallBottom = this.stage.drawRectangle(this.screenWidth / 2, this.screenHeight - this.tileHeight/2,
-            this.screenWidth, this.tileHeight*2, 'white', true);
+        var wallRight = this.stage.drawRectangle(this.screenWidth - this.tileHeight / 2, this.screenHeight / 2,
+            this.tileHeight, this.screenHeight, 'white', true);
+        var wallTop = this.stage.drawRectangle(this.screenWidth / 2, this.tileHeight / 2, this.screenWidth,
+            this.tileHeight, 'white', true);
 
-        this.scenery.push(createEntity(wallTop), createEntity(wallBottom), createEntity(wallLeft),
-            createEntity(wallRight));
+        var wallBottom = this.stage.drawRectangle(this.screenWidth / 2, this.screenHeight - this.tileHeight / 2,
+            this.screenWidth, this.tileHeight, 'white', false);
+
+        this.scenery.push(createEntity(wallTop), createEntity(wallLeft), createEntity(wallRight));
+        this.obstacles.push(createEntity(wallBottom))
+    };
+
+    WorldBuilder.prototype.createScoreBoard = function () {
+        return this.stage.drawText(this.screenWidth / 2, this.screenHeight / 2, '0', this.screenHeight / 2, 'gamefont',
+            'white', 0, undefined, 0.3);
     };
 
     function createEntity(drawable) {
@@ -34,7 +41,10 @@ var WorldBuilder = (function (Entity) {
 
         [0].forEach(function (num) {
             this.players[num] = {
-                entity: this.createPlayerEntity({x:this.screenWidth/2,y:this.screenHeight/2}, num),
+                entity: this.createPlayerEntity({
+                    x: this.screenWidth / 2,
+                    y: this.screenHeight / 6 * 5
+                }, num),
                 controls: [],
                 jumpPressed: false
             };
@@ -46,15 +56,63 @@ var WorldBuilder = (function (Entity) {
     WorldBuilder.prototype.createPlayerEntity = function (startPosition, id, color) {
         var sprite;
         if (color) {
-            sprite = this.stage.drawRectangle(startPosition.x, startPosition.y, this.tileHeight * 10, this.tileHeight * 2,
+            sprite = this.stage.drawRectangle(startPosition.x, startPosition.y, this.tileHeight * 6, this.tileHeight,
                 color, true);
         } else {
-            sprite = this.stage.drawRectangle(startPosition.x, startPosition.y, this.tileHeight * 10, this.tileHeight * 2,
-                'white');
+            sprite = this.stage.drawRectangle(startPosition.x, startPosition.y, this.tileHeight * 6, this.tileHeight,
+                'white', true);
         }
         var entity = new Entity(startPosition.x, startPosition.y, startRotation, sprite, sprite);
         entity.id = id;
         return entity;
+    };
+
+    WorldBuilder.prototype.createStartBall = function () {
+        var magnitude = 10;
+        var randomDegrees = range(50,60);
+        var angle = Vectors.toRadians(randomDegrees);
+        this.createBall({
+            x: 150,
+            y: 50
+        }, {
+            x: Vectors.getX(0, magnitude, angle),
+            y: Vectors.getY(0, magnitude, angle)
+        });
+    };
+
+    WorldBuilder.prototype.create2ndBall = function () {
+        var magnitude = 10;
+        var randomDegrees = range(0,1) ? range(260,265) : range(275,280);
+        var angle = Vectors.toRadians(randomDegrees);
+        this.createBall({
+            x: 150,
+            y: 50
+        }, {
+            x: Vectors.getX(0, magnitude, angle),
+            y: Vectors.getY(0, magnitude, angle)
+        });
+    };
+
+    WorldBuilder.prototype.createRandomBall = function () {
+        if (this.balls.length == 0) {
+            this.createStartBall();
+            return;
+        }
+        if (this.balls.length == 1) {
+            this.create2ndBall();
+            return;
+        }
+
+        var magnitude = 10;
+        var randomDegrees = range(0,1) ? range(15,80) : range(100, 165);
+        var angle = Vectors.toRadians(randomDegrees);
+        this.createBall({
+            x: 150,
+            y: 50
+        }, {
+            x: Vectors.getX(0, magnitude, angle),
+            y: Vectors.getY(0, magnitude, angle)
+        });
     };
 
     WorldBuilder.prototype.createBall = function (point, direction) {
@@ -67,4 +125,4 @@ var WorldBuilder = (function (Entity) {
     };
 
     return WorldBuilder;
-})(Entity);
+})(Entity, Vectors, range);

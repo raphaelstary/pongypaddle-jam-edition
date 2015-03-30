@@ -20,17 +20,17 @@ var SplashScreen = (function (Event, Key) {
             }
         });
 
-        var myName = this.stage.drawText(screenWidth / 2, screenHeight / 6, 'Raphael Stary', tileWidth * 3, 'Arial', 'white');
+        var myName = this.stage.drawText(screenWidth / 2, screenHeight / 6, 'Raphael Stary', tileWidth * 3, 'gamefont', 'white');
 
-        var presents = this.stage.drawText(screenWidth / 2, screenHeight / 6 * 1.5, 'presents', tileWidth * 2, 'Arial', 'white');
+        var presents = this.stage.drawText(screenWidth / 2, screenHeight / 6 * 1.5, 'presents', tileWidth * 2, 'gamefont', 'white');
         var gameName = this.stage.drawText(screenWidth / 2, screenHeight / 5*2, 'PONGY PADDLE', tileWidth * 4,
-            'Arial', 'white');
+            'gamefont', 'white');
 
         var gameJamEdition = this.stage.drawText(screenWidth / 2, screenHeight / 2, "game jam edition", tileWidth * 2,
-            'Arial', 'grey');
+            'gamefont', 'grey');
 
         var gameControls = this.stage.drawText(screenWidth / 2, screenHeight / 4 * 3, "press 'ENTER' to continue", tileWidth * 2,
-            'Arial', 'white');
+            'gamefont', 'white');
 
         var self = this;
 

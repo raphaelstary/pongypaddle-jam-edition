@@ -1,12 +1,13 @@
 var World = (function (Math, Object, Vectors, Key) {
     "use strict";
 
-    function World(stage, players, scenery, balls, playerController, camera) {
+    function World(stage, players, scenery, balls, playerController, camera, obstacles, paddleHitFn, gameOverFn) {
         this.stage = stage;
 
         this.scenery = scenery;
         this.players = players;
         this.balls = balls;
+        this.obstacles = obstacles;
 
         this.activePlayers = 0;
         this.activeBalls = 0;
@@ -15,20 +16,17 @@ var World = (function (Math, Object, Vectors, Key) {
 
         this.camera = camera;
 
-        this.gravity = 5;
+        this.gravity = 7;
 
         this.suicides = {};
+        this.paddleHitFn = paddleHitFn;
+        this.gameOverFn = gameOverFn;
     }
 
     World.prototype.handleKeyBoard = function (keyBoard) {
         if (keyBoard[Key.DOWN]) {
-            this.playerController.createBall({
-                x: 50,
-                y: 50
-            }, {
-                x: 2,
-                y: 2
-            });
+            this.playerController.createNewBall();
+            this.activeBalls++;
         } else if (keyBoard[Key.LEFT]) {
             this.playerController.jumpLeft(this.players[0].entity);
         } else if (keyBoard[Key.RIGHT]) {
@@ -48,7 +46,6 @@ var World = (function (Math, Object, Vectors, Key) {
             var forceX = 0;
             var forceY = 0;
 
-            // current - river upstream
             forceY += this.gravity;
 
             var airResistance = 0.9;
@@ -184,45 +181,28 @@ var World = (function (Math, Object, Vectors, Key) {
                         ball.y = p.y - ballHeightHalf;
 
                     }
+                    this.paddleHitFn();
 
-                }
-            }, this);
-        }, this);
-    };
-
-    World.prototype.checkCollisionsWithWallsKillOn = function () {
-        this.scenery.forEach(function (element) {
-            this.balls.forEach(function (ball, index, ballsArray) {
-                var widthHalf = ball.collision.getWidthHalf();
-                var heightHalf = ball.collision.getHeightHalf();
-                if (ball.x + widthHalf > element.getCornerX() && ball.x - widthHalf < element.getEndX() &&
-                    ball.y + heightHalf > element.getCornerY() && ball.y - heightHalf < element.getEndY()) {
-
-                    if (element.collision.getWidth() > element.collision.getHeight()) {
-                        ball.forceY *= -1;
-                    } else {
-                        ball.forceX *= -1;
-                    }
-                }
-            }, this);
-
-            Object.keys(this.players).forEach(function (playerKey) {
-                var player = this.players[playerKey].entity;
-
-                var widthHalf = player.collision.getWidthHalf();
-                var heightHalf = player.collision.getHeightHalf();
-                if (player.x + widthHalf > element.getCornerX() && player.x - widthHalf < element.getEndX() &&
-                    player.y + heightHalf > element.getCornerY() && player.y - heightHalf < element.getEndY()) {
-
-                    this.killPaddle(player, playerKey);
-                    this.suicides[playerKey] = true;
                 }
             }, this);
         }, this);
     };
 
     World.prototype.checkCollisions = function () {
-        this.scenery.forEach(function (element) {
+        this.obstacles.forEach(function (element) {
+            for (var i=this.balls.length-1; i>=0; i--) {
+                var ball = this.balls[i];
+                var widthHalf = ball.collision.getWidthHalf();
+                var heightHalf = ball.collision.getHeightHalf();
+                if (ball.x + widthHalf > element.getCornerX() && ball.x - widthHalf < element.getEndX() &&
+                    ball.y + heightHalf > element.getCornerY() && ball.y - heightHalf < element.getEndY()) {
+
+                    this.removeBall(ball, i, this.balls);
+                }
+            }
+        }, this);
+
+        this.scenery.concat(this.obstacles).forEach(function (element) {
             this.balls.forEach(function (ball, index, ballsArray) {
                 var widthHalf = ball.collision.getWidthHalf();
                 var heightHalf = ball.collision.getHeightHalf();
@@ -301,6 +281,9 @@ var World = (function (Math, Object, Vectors, Key) {
         this.stage.remove(ball.collision);
         this.stage.remove(ball.sprite);
         ballArray.splice(index, 1);
+
+        if (this.activeBalls <= 0)
+            this.gameOverFn();
     };
 
     World.prototype.killPaddle = function (player, key) {
@@ -325,6 +308,7 @@ var World = (function (Math, Object, Vectors, Key) {
             remove(player);
         }, this);
         this.scenery.forEach(remove);
+        this.obstacles.forEach(remove);
         this.balls.forEach(remove);
     };
 

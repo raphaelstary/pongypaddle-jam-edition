@@ -1,16 +1,25 @@
-var MyGameResources = (function () {
+var MyGameResources = (function (URL, addFontToDOM) {
     "use strict";
 
     // your files
+    var font;
 
     function registerFiles(resourceLoader) {
         // add your files to the resource loader for downloading
-
-        return 0; // number of registered files
+        font = resourceLoader.addFont('data/FFFFORWA.woff');
+        return 1; // number of registered files
     }
 
     function processFiles() {
         // process your downloaded files
+        if (URL) {
+            addFontToDOM([
+                {
+                    name: 'gamefont',
+                    url: URL.createObjectURL(font.blob)
+                }
+            ]);
+        }
 
         return {
             // services created with downloaded files
@@ -21,4 +30,4 @@ var MyGameResources = (function () {
         create: registerFiles,
         process: processFiles
     };
-})();
+})(window.URL || window.webkitURL, addFontToDOM);
