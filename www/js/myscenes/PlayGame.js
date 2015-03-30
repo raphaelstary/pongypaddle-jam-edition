@@ -29,11 +29,8 @@ var PlayGame = (function (Event, createWorld, Object, Math) {
         var keyBoardListener = this.events.subscribe(Event.KEY_BOARD, world.handleKeyBoard.bind(world));
         var movePlayerListener = this.events.subscribe(Event.TICK_MOVE, world.updatePlayerMovement.bind(world));
         var moveBallListener = this.events.subscribe(Event.TICK_MOVE, world.updateBallMovement.bind(world));
-        var ballCollisionListener = this.events.subscribe(Event.TICK_COLLISION, world.checkBallCollision.bind(world));
-        var wallsKill = false;
-        var wallCollisionListener = wallsKill ?
-            this.events.subscribe(Event.TICK_COLLISION, world.checkCollisionsWithWallsKillOn.bind(world)) :
-            this.events.subscribe(Event.TICK_COLLISION, world.checkCollisions.bind(world));
+        var ballCollisionListener = this.events.subscribe(Event.TICK_COLLISION, world.checkBallPaddleCollision.bind(world));
+        var wallCollisionListener = this.events.subscribe(Event.TICK_COLLISION, world.checkCollisions.bind(world));
         var cameraListener = this.events.subscribe(Event.TICK_CAMERA, world.updateCamera.bind(world));
 
         function gameOver() {
@@ -44,14 +41,12 @@ var PlayGame = (function (Event, createWorld, Object, Math) {
         }
 
         var score = 9;
+
         function paddleHit() {
             score++;
             scoreBoard.data.msg = score.toString();
             if (score % 10 == 0) {
-                var howMany = Math.floor(score / 10);
-                for (var i = 0; i < howMany; i++) {
-                    worldBuilder.createRandomBall();
-                }
+                worldBuilder.createRandomBall();
             }
         }
 

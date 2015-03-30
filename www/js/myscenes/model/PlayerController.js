@@ -6,12 +6,12 @@ var PlayerController = (function (Math, Entity, Vectors) {
     }
 
     PlayerController.prototype.jumpLeft = function (player) {
-        player.forceX -= 10;
+        player.forceX -= 15;
         player.forceY -= 20;
     };
 
     PlayerController.prototype.jumpRight = function (player) {
-        player.forceX += 10;
+        player.forceX += 15;
         player.forceY -= 20;
     };
 

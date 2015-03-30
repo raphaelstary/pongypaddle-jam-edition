@@ -16,7 +16,7 @@ var World = (function (Math, Object, Vectors, Key) {
 
         this.camera = camera;
 
-        this.gravity = 7;
+        this.gravity = 8;
 
         this.suicides = {};
         this.paddleHitFn = paddleHitFn;
@@ -94,8 +94,8 @@ var World = (function (Math, Object, Vectors, Key) {
         }, this);
     };
 
-    World.prototype.checkBallCollision = function () {
-        this.balls.forEach(function (ball, index, ballArray) {
+    World.prototype.checkBallPaddleCollision = function () {
+        this.balls.forEach(function (ball) {
             var ballWidthHalf = ball.collision.getWidthHalf();
             var ballHeightHalf = ball.collision.getHeightHalf();
 
@@ -120,30 +120,6 @@ var World = (function (Math, Object, Vectors, Key) {
 
                     var p;
 
-                    // Now compare them to know the side of collision
-                    //if (player.lastX + widthHalf <= ball.x - ballWidthHalf &&
-                    //    player.x + widthHalf > ball.x - ballWidthHalf) {
-                    //
-                    //    // Collision on right side of player
-                    //    p = Vectors.getIntersectionPoint(ball.lastX - ballWidthHalf, ball.lastY, ball.x - ballWidthHalf,
-                    //        ball.y, b2_x, b2_y, b3_x, b3_y);
-                    //    ball.x = p.x + ballWidthHalf;
-                    //
-                    //    ball.forceX *= -1;
-                    //
-                    //} else if (player.lastX - widthHalf >= ball.x + ballWidthHalf &&
-                    //    player.x - widthHalf < ball.x + ballWidthHalf) {
-                    //
-                    //    // Collision on left side of player
-                    //    p = Vectors.getIntersectionPoint(ball.lastX + ballWidthHalf, ball.lastY, ball.x + ballWidthHalf,
-                    //        ball.y, b1_x, b1_y, b4_x, b4_y);
-                    //    ball.x = p.x - ballWidthHalf;
-                    //
-                    //
-                    //
-                    //    ball.forceX *= -1;
-                    //
-                    //} else
                     if (player.lastY + heightHalf <= ball.y - ballHeightHalf &&
                         player.y + heightHalf > ball.y - ballHeightHalf) {
 
@@ -157,23 +133,6 @@ var World = (function (Math, Object, Vectors, Key) {
                     } else {
 
                         ball.forceY *= -1;
-                        //if (ball.x < player.x - this.tileHeight) {
-                        //    if (ball.lastX < ball.x) {
-                        //        ball.forceX *= 1.5;
-                        //    } else {
-                        //        ball.forceX *= 0.5;
-                        //    }
-                        //} else if (ball.x > player.x + this.tileHeight) {
-                        //    if (ball.lastX > ball.x) {
-                        //        ball.forceX *= 1.5;
-                        //    } else {
-                        //        ball.forceX *= 0.5;
-                        //    }
-                        //} else {
-                        //    if (ball.forceX > 5) {
-                        //        ball.forceX *= 0.5;
-                        //    }
-                        //}
 
                         // Collision on top side of player
                         p = Vectors.getIntersectionPoint(ball.lastX, ball.lastY + ballHeightHalf, ball.x,
@@ -203,7 +162,7 @@ var World = (function (Math, Object, Vectors, Key) {
         }, this);
 
         this.scenery.concat(this.obstacles).forEach(function (element) {
-            this.balls.forEach(function (ball, index, ballsArray) {
+            this.balls.forEach(function (ball) {
                 var widthHalf = ball.collision.getWidthHalf();
                 var heightHalf = ball.collision.getHeightHalf();
                 if (ball.x + widthHalf > element.getCornerX() && ball.x - widthHalf < element.getEndX() &&

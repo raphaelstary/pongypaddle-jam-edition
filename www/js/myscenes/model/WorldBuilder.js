@@ -56,20 +56,21 @@ var WorldBuilder = (function (Entity, Vectors, range) {
     WorldBuilder.prototype.createPlayerEntity = function (startPosition, id, color) {
         var sprite;
         if (color) {
-            sprite = this.stage.drawRectangle(startPosition.x, startPosition.y, this.tileHeight * 6, this.tileHeight,
-                color, true);
+            sprite = this.stage.drawRectangle(startPosition.x, startPosition.y, this.tileHeight * 12,
+                this.tileHeight * 2, color, true);
         } else {
-            sprite = this.stage.drawRectangle(startPosition.x, startPosition.y, this.tileHeight * 6, this.tileHeight,
-                'white', true);
+            sprite = this.stage.drawRectangle(startPosition.x, startPosition.y, this.tileHeight * 12,
+                this.tileHeight * 2, 'white', true);
         }
         var entity = new Entity(startPosition.x, startPosition.y, startRotation, sprite, sprite);
         entity.id = id;
+        entity.debug = true;
         return entity;
     };
 
+    var magnitude = 8;
     WorldBuilder.prototype.createStartBall = function () {
-        var magnitude = 10;
-        var randomDegrees = range(50,60);
+        var randomDegrees = range(50, 60);
         var angle = Vectors.toRadians(randomDegrees);
         this.createBall({
             x: 150,
@@ -81,8 +82,7 @@ var WorldBuilder = (function (Entity, Vectors, range) {
     };
 
     WorldBuilder.prototype.create2ndBall = function () {
-        var magnitude = 10;
-        var randomDegrees = range(0,1) ? range(260,265) : range(275,280);
+        var randomDegrees = range(0, 1) ? range(260, 265) : range(275, 280);
         var angle = Vectors.toRadians(randomDegrees);
         this.createBall({
             x: 150,
@@ -103,8 +103,7 @@ var WorldBuilder = (function (Entity, Vectors, range) {
             return;
         }
 
-        var magnitude = 10;
-        var randomDegrees = range(0,1) ? range(15,80) : range(100, 165);
+        var randomDegrees = range(0, 1) ? range(15, 80) : range(100, 165);
         var angle = Vectors.toRadians(randomDegrees);
         this.createBall({
             x: 150,
