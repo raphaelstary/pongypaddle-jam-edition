@@ -68,7 +68,7 @@ var WorldBuilder = (function (Entity, Vectors, range) {
         return entity;
     };
 
-    var magnitude = 10;
+    var magnitude = 8;
     WorldBuilder.prototype.createStartBall = function () {
         var randomDegrees = range(50, 60);
         var angle = Vectors.toRadians(randomDegrees);
