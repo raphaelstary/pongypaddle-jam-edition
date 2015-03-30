@@ -29,8 +29,8 @@ var WorldBuilder = (function (Entity, Vectors, range) {
     };
 
     WorldBuilder.prototype.createScoreBoard = function () {
-        return this.stage.drawText(this.screenWidth / 2, this.screenHeight / 2, '0', this.screenHeight / 2, 'gamefont',
-            'white', 0, undefined, 0.3);
+        return this.stage.drawText(this.screenWidth / 2 + 20, this.screenHeight / 2 + 20, '0', this.screenHeight / 2,
+            'gamefont', 'white', 0, undefined, 0.3);
     };
 
     function createEntity(drawable) {
@@ -68,7 +68,7 @@ var WorldBuilder = (function (Entity, Vectors, range) {
         return entity;
     };
 
-    var magnitude = 8;
+    var magnitude = 10;
     WorldBuilder.prototype.createStartBall = function () {
         var randomDegrees = range(50, 60);
         var angle = Vectors.toRadians(randomDegrees);

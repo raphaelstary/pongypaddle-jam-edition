@@ -40,7 +40,7 @@ var PlayGame = (function (Event, createWorld, Object, Math) {
             nextScene();
         }
 
-        var score = 9;
+        var score = 0;
 
         function paddleHit() {
             score++;
