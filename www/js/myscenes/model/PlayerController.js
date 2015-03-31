@@ -4,19 +4,20 @@ var PlayerController = (function (Math, Entity, Vectors) {
     function PlayerController(worldBuilder) {
         this.worldBuilder = worldBuilder;
     }
-
+    var forceX = 15;
+    var forceY = 20;
     PlayerController.prototype.jumpLeft = function (player) {
-        if (player.forceX > -15)
-            player.forceX -= 15;
-        if (player.forceY > -20)
-            player.forceY -= 20;
+        if (player.forceX > -forceX)
+            player.forceX -= forceX;
+        if (player.forceY > -forceY)
+            player.forceY -= forceY;
     };
 
     PlayerController.prototype.jumpRight = function (player) {
-        if (player.forceX < 15)
-            player.forceX += 15;
-        if (player.forceY > -20)
-            player.forceY -= 20;
+        if (player.forceX < forceX)
+            player.forceX += forceX;
+        if (player.forceY > -forceY)
+            player.forceY -= forceY;
     };
 
     PlayerController.prototype.createNewBall = function () {
