@@ -6,7 +6,7 @@ var MyGameResources = (function (URL, addFontToDOM) {
 
     function registerFiles(resourceLoader) {
         // add your files to the resource loader for downloading
-        font = resourceLoader.addFont('data/FFFFORWA.woff');
+        font = resourceLoader.addFont('data/FFFFORWA.woff'); //the cool px font
         return 1; // number of registered files
     }
 
