@@ -14,4 +14,4 @@ var SoundSpriteManager = (function (Howl) {
     };
 
     return SoundSpriteManager;
-})(Howl);
+})(undefined);

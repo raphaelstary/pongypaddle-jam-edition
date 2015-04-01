@@ -28,4 +28,4 @@ var SoundFilesManager = (function (Howl) {
     };
 
     return SoundFilesManager;
-})(Howl);
+})(undefined);
